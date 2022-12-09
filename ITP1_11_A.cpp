@@ -30,7 +30,6 @@ constexpr int INF = 1e9;
 
 struct dice {
     // 2次元配列 -> E と W への対応ができない
-    // 展開図を回転させる -> 
     array<int, 7> faces;
 
     dice(vector<int> &v) {
@@ -40,28 +39,29 @@ struct dice {
     }
 
     void rotate(char c) {
+        int temp;
         switch (c) {
             case 'N':
-                swap(faces.at(5), faces.at(6));
-                swap(faces.at(6), faces.at(2));
-                swap(faces.at(2), faces.at(1));
+                rotate_raw(1, 2, 6, 5);
                 break;
             case 'S':
-                swap(faces.at(5), faces.at(1));
-                swap(faces.at(1), faces.at(2));
-                swap(faces.at(2), faces.at(6));
+                rotate_raw(1, 5, 6, 2);
                 break;
             case 'E':
-                swap(faces.at(4), faces.at(1));
-                swap(faces.at(1), faces.at(3));
-                swap(faces.at(3), faces.at(6));
+                rotate_raw(1, 4, 6, 3);
                 break;
             case 'W':
-                swap(faces.at(5), faces.at(4));
-                swap(faces.at(4), faces.at(2));
-                swap(faces.at(2), faces.at(3));
+                rotate_raw(1, 3, 6, 4);
                 break;
         }
+    }
+
+    void rotate_raw(int a, int b, int c, int d) {
+        int temp = faces.at(a);
+        faces.at(a) = faces.at(b);
+        faces.at(b) = faces.at(c);
+        faces.at(c) = faces.at(d);
+        faces.at(d) = temp;
     }
 };
 
