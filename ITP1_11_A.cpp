@@ -27,60 +27,58 @@ constexpr int INF = 1e9;
 
 #pragma endregion
 
+
 struct dice {
-    int faces[3][4];
-    int c = 0, r = 1;
+    // 2次元配列 -> E と W への対応ができない
+    // 展開図を回転させる -> 
+    array<int, 7> faces;
 
     dice(vector<int> &v) {
-
-        for (int i = 0; i < 4; i++) {
-            faces[0][i] = v.at(0);
-        }
-        faces[1][0] = v.at(3);
-        faces[1][0] = v.at(1);
-        faces[1][0] = v.at(2);
-        faces[1][0] = v.at(4);
-        for (int i = 0; i < 4; i++) {
-            faces[2][i] = v.at(5);
+        for (int i = 0; i < 6; i++) {
+            faces.at(i+1) = v.at(i);
         }
     }
 
-    int rotate(char dir) {
-        switch (dir) {
+    void rotate(char c) {
+        switch (c) {
             case 'N':
-                if (--c < 0) c = 2;
+                swap(faces.at(5), faces.at(6));
+                swap(faces.at(6), faces.at(2));
+                swap(faces.at(2), faces.at(1));
                 break;
             case 'S':
-                if (++c >= 3) c = 0;
-                break;
-            case 'W':
-                if (--r < 0) r = 3;
+                swap(faces.at(5), faces.at(1));
+                swap(faces.at(1), faces.at(2));
+                swap(faces.at(2), faces.at(6));
                 break;
             case 'E':
-                if (++r >= 4) r = 0;
+                swap(faces.at(4), faces.at(1));
+                swap(faces.at(1), faces.at(3));
+                swap(faces.at(3), faces.at(6));
+                break;
+            case 'W':
+                swap(faces.at(5), faces.at(4));
+                swap(faces.at(4), faces.at(2));
+                swap(faces.at(2), faces.at(3));
                 break;
         }
-
-        return faces[c][r];
     }
 };
 
 int main() {
-    vector<int> v;
-
+    vector <int> v;
     for (int i = 0; i < 6; i++) {
         v.push_back(0);
         cin >> v.back();
     }
 
     dice d(v);
-
-    string s; int top;
+    string s;
     cin >> s;
 
     for (auto &&e : s) {
-        top = d.rotate(e);
+        d.rotate(e);
     }
 
-    cout << top << endl;
+    cout << d.faces.at(1) << endl;
 }
